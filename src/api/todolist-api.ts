@@ -13,7 +13,8 @@ export const todolistAPI = {
     },
     createTodolist(title: string) {
         // return axios.post('https://social-network.samuraijs.com/api/1.1/todo-lists', {title}, settings)
-        return instance.post<ResponseType<{ item: TodolistType }>>('todo-lists', {title})
+        // return instance.post<ResponseType<{ item: TodolistType }>>('todo-lists', {title})
+        return instance.post<ResponseType<CreateTodoRespType>>('todo-lists', {title})
     },
     updateTodolist(todolistId: string, title: string) {
         // return axios.put(`https://social-network.samuraijs.com/api/1.1/todo-lists/${todolistId}`, {title}, settings)
@@ -22,7 +23,37 @@ export const todolistAPI = {
     deleteTodolist(todolistId: string) {
         // return axios.delete(`https://social-network.samuraijs.com/api/1.1/todo-lists/${todolistId}`, settings)
         return instance.delete<ResponseType>(`todo-lists/${todolistId}`)
+    },
+    getTasks(todolistId: string) {
+
+        return instance.get<GetTasksType>(`/todo-lists/${todolistId}/tasks`)
+    },
+    createTask(todolistId: string, title: string) {
+        return instance.post<ResponseType<CreateTaskRespType>>(`todo-lists/${todolistId}/tasks`, {title})
+    },
+    deleteTask(todolistId: string, taskId: string) {
+        return instance.delete<ResponseType>(`todo-lists/${todolistId}/tasks/${taskId}`)
+    },
+    updateTask(todolistId: string, taskId: string, model: PayloadType) {
+        return instance.put<ResponseType>(`todo-lists/${todolistId}/tasks/${taskId}`, {model})
     }
+}
+
+type PayloadType = {
+    completed: boolean
+    deadline: string
+    description: string | null
+    priority: number
+    startDate: string
+    status: number
+    Title: string
+}
+
+type CreateTodoRespType = {
+    item: TodolistType
+}
+type CreateTaskRespType = {
+    item: TaskType
 }
 
 type TodolistType = {
@@ -46,10 +77,31 @@ type UpdateTodolistType = {
 }
 
 type CreateTodolistType = {
-    data: {
-        item: TodolistType
-    }
+    // data: {
+    //     item: TodolistType
+    // }
+    data: CreateTodoRespType
     fieldsErrors: string[]
     messages: string[]
     resultCode: number
+}
+
+type TaskType = {
+    description: string
+    title: string
+    completed: boolean
+    status: number
+    priority: number
+    startDate: Date
+    deadline: Date
+    id: string
+    todoListId: string
+    order: number
+    addedDate: Date
+}
+
+type GetTasksType = {
+    items: TaskType[]
+    totalCount: number
+    error: string | null
 }
