@@ -67,22 +67,37 @@ export const UpdateTodolistTitle = () => {
 }
 export const GetTodolistTasks = () => {
     const [state, setState] = useState<any>(null)
-    useEffect(() => {
-        const todolistId = 'df1211fc-4d7d-4360-9b4c-88305a9d7d0d'
+    const [todolistId, setTodolistId] = useState<string>('')
+
+    const onClickHandler = ()=> {
         todolistAPI.getTasks(todolistId).then((res) => {
             console.log(res.data.items)
             setState(res.data)
         })
+    }
 
-    }, [])
-    return <div>{JSON.stringify(state)}</div>
+    // useEffect(() => {
+    //     const todolistId = 'df1211fc-4d7d-4360-9b4c-88305a9d7d0d'
+    //     todolistAPI.getTasks(todolistId).then((res) => {
+    //         console.log(res.data.items)
+    //         setState(res.data)
+    //     })
+    //
+    // }, [])
+    return <div>{JSON.stringify(state)}
+        <div>
+            <input type="text" placeholder={'get tasks'} value={todolistId}
+                   onChange={(e) => setTodolistId(e.currentTarget.value)}/>
+            <button onClick={onClickHandler}>Get tasks</button>
+        </div>
+    </div>
 }
 export const CreateTask = () => {
     const [state, setState] = useState<any>(null)
-    const [textValue, setTextValue] = useState<string>('Enter the Title')
+    const [todolistId, setTodolistId] = useState<string>('')
+    const [textValue, setTextValue] = useState<string>('')
 
     const onClickHandler = () => {
-        const todolistId = 'df1211fc-4d7d-4360-9b4c-88305a9d7d0d'
         const payload = {title: textValue}
 
         todolistAPI.createTask(todolistId, payload.title).then(res => setState(res.data.data))
@@ -97,7 +112,8 @@ export const CreateTask = () => {
 
     return <div>{JSON.stringify(state)}
         <div>
-            <input type="text" value={textValue} onChange={(e) => setTextValue(e.currentTarget.value)}/>
+            <input type="text" placeholder={'todolist id'} value={todolistId} onChange={(e) => setTodolistId(e.currentTarget.value)}/>
+            <input type="text" placeholder={'new task'} value={textValue} onChange={(e) => setTextValue(e.currentTarget.value)}/>
             <button onClick={onClickHandler}>Create task</button>
         </div>
     </div>
