@@ -86,7 +86,7 @@ export const GetTodolistTasks = () => {
     // }, [])
     return <div>{JSON.stringify(state)}
         <div>
-            <input type="text" placeholder={'get tasks'} value={todolistId}
+            <input type="text" placeholder={'enter todolist id'} value={todolistId}
                    onChange={(e) => setTodolistId(e.currentTarget.value)}/>
             <button onClick={onClickHandler}>Get tasks</button>
         </div>
